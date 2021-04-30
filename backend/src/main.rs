@@ -1,12 +1,14 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-use rocket::http::Method;
-use rocket_cors::{AllowedHeaders, AllowedOrigins};
-
 #[macro_use]
 extern crate rocket;
 #[macro_use]
 extern crate rocket_contrib;
+
+use rocket::http::Method;
+use rocket_cors::{AllowedHeaders, AllowedOrigins};
+
+mod anime;
 
 fn main() {
     let cors = rocket_cors::CorsOptions {
@@ -19,10 +21,17 @@ fn main() {
     .to_cors().unwrap();
 
     rocket::ignite()
-        .mount("/",
+        .mount(
+            "/",
             routes![
                 test
             ]
+        )
+        .mount(
+            "/anime/",
+            routes![
+                anime::get::get
+            ],
         )
         .attach(cors)
         .launch();
