@@ -1,22 +1,18 @@
 <script lang="ts">
     import { ImageLoader, Tile, Grid, Row, Column } from "carbon-components-svelte";
 
-    export let anime_id: string = "WLWV2Kimg";
+    export let anime_id: string;
+    export let img_url: string;
+    export let anime_name: string;
+    let response: JSON;
 
     function x() {
-        let Http = new XMLHttpRequest
-        Http.open("GET", "http://localhost:8000/request/" + anime_id);
-        Http.send();
-
-        Http.onreadystatechange = (e) => {
-            response = JSON.parse(Http.response)
-            console.log(response);
-        }
+        return;
     }
 
-    let img_url: string = "https://media.notify.moe/images/anime/original/WLWV2Kimg.png";
-    let anime_name: string = "Houseki No Kuni";
-    let response: JSON;
+    if (img_url != "") {
+        img_url = "https://media.notify.moe/images/anime/large/" + anime_id + ".webp";
+    }
 
 </script>
 
