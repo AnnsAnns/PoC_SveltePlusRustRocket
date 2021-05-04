@@ -1,17 +1,24 @@
 <script lang="ts">
 	import { Button } from "carbon-components-svelte";
+import { each } from "svelte/internal";
 	import Info from "./components/Info.svelte";
 
-	export let name: string;
+	export let request_status: string;
+	let animelist = [];
 
 	function buttonClick() {
-		const Http = new XMLHttpRequest();
-		Http.open("GET", "http://localhost:8000/test");
-		Http.send();
+        let Http = new XMLHttpRequest
+        Http.open("GET", "https://notify.moe/api/anime/WLWV2Kimg");
+        Http.send();
 
-		Http.onreadystatechange = (e) => {
-			name = Http.responseText
-			console.log(name);
+        Http.onreadystatechange = (e) => {
+            let _ = JSON.parse(Http.response);
+			console.log(_);
+			animelist.push(_);
+			animelist = animelist;
+            console.log(animelist[-1]);
+        
+			request_status = "Worked!"
 		}
 	}
 
@@ -19,14 +26,16 @@
 
 <main>
 	<div>
-		<h1>Status: {name}!</h1>
+		<h1>Status: {request_status}!</h1>
 		<Button kind="danger" on:click={buttonClick} style="text-align:center">Request Le Poggers</Button>
 	</div><br>
 
 	<div class="flexList">
-		<Info></Info>
-		<Info></Info>
-		<Info></Info>
+		{#each animelist as anime}
+			<Info
+				anime_id={anime["id"]}
+				anime_name={anime["title"]["canonical"]}></Info>
+		{/each}
 	</div>
 </main>
 
